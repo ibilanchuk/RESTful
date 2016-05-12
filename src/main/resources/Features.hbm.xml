@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 05.05.2016 17:06:09 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.mycompany.restful.model.Features" table="FEATURES" catalog="FEATURES" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <property name="renderingEngine" type="string">
+            <column name="Rendering_engine" length="30" not-null="true" />
+        </property>
+        <property name="browser" type="string">
+            <column name="Browser" length="30" not-null="true" />
+        </property>
+        <property name="platform" type="string">
+            <column name="Platform" length="30" not-null="true" />
+        </property>
+        <property name="engineVersion" type="string">
+            <column name="Engine_version" length="30" not-null="true" />
+        </property>
+        <property name="cssGrade" type="string">
+            <column name="Css_grade" length="30" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

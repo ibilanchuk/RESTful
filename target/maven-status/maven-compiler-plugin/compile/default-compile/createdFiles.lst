@@ -1,0 +1,5 @@
+com\mycompany\restful\dao\FeaturesDao.class
+com\mycompany\restful\Service\Service.class
+com\mycompany\restful\config\ApplicationConfig.class
+com\mycompany\restful\util\HibernateUtil.class
+com\mycompany\restful\model\Features.class
