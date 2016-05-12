@@ -7,19 +7,30 @@ package com.mycompany.restful.Service;
 
 import com.mycompany.restful.dao.FeaturesDao;
 import com.mycompany.restful.model.Features;
+import com.mysql.jdbc.StringUtils;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.json.simple.JSONObject;
 
 /**
  * REST Web Service
@@ -27,7 +38,7 @@ import javax.ws.rs.core.Response;
  * @author ibilanchuk
  */
 @Path("service")
-public class Service {
+public class Service extends HttpServlet{
 
     @Context
     private UriInfo context;
@@ -38,6 +49,7 @@ public class Service {
     public Service() {
     }
     private FeaturesDao featureDao = new FeaturesDao();
+   
 
     @GET
     @Path("/Feature/{id}")
@@ -47,19 +59,12 @@ public class Service {
         return Response.status(200).entity(feature).build();
     }
 
+
     @GET
     @Path("/Features")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllFeatures() {
-        List<Features> output = featureDao.getAllFeatures();
-        return Response.status(200).entity(output).build();
-    }
-    @GET
-    @Path("/aFeatures")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getFeatures() {
-        List<Features> output = featureDao.getFeatures();
-        return Response.status(200).entity(output).build();
+    public JSONObject getFeatures( @QueryParam("length")int length, @QueryParam("start") int start) {     
+        return featureDao.getFeatures(length,start);
     }   
     @GET
     @Path("/RenderingEngine")

@@ -14,6 +14,7 @@ import java.util.Map;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -43,22 +44,22 @@ public class FeaturesDao {
         }
         return feature;
     }
-   public List<Features> getFeatures() {
+  public JSONObject getFeatures(int length, int start){
 
-        List<Features> features = null;
+        List feature = null;
         Session session = null;
-
+        JSONObject obj = new JSONObject();
+ 
         try {
-           
             session = sessionFactory.openSession();
             session.beginTransaction();
-            Query q = session.createQuery("from Features F");             
-            q.setMaxResults(5);
-            q.setFirstResult(0);
-            //session.createQuery("from Features F order by count(F.id) desc limit start,lim ").setParameter("start",start).setParameter("length", length).list();
-            features = q.list();
+            feature = session.createQuery("from Features").setMaxResults(length).setFirstResult(start).list();
+            Query q  = session.createQuery("SELECT COUNT(*) FROM Features");
+            obj.put("count", q.list()); 
+            obj.put("data", (List)feature);
             session.getTransaction().commit();
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) {
             if (session != null) {
                 session.getTransaction().rollback();
             }
@@ -67,7 +68,7 @@ public class FeaturesDao {
                 session.close();
             }
         }
-        return features;
+        return obj;
     }
   
     public List<Features> getAllFeatures() {

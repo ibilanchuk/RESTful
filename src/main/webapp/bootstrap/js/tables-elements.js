@@ -11,7 +11,7 @@ $(document).ready(function(){
 $.fn.dataTable.pipeline = function ( opts ){
     // Configuration options 
     var conf = $.extend( {
-        pages: 3,     // number of pages to cache
+        pages: 5,     // number of pages to cache
         url: '',      // script url
         data: null,   // function or object with parameters to send to the server
                       // matching how `ajax.data` works in DataTables
@@ -92,15 +92,11 @@ $.fn.dataTable.pipeline = function ( opts ){
                 "cache":    false,
                 "success":  function ( json ) {
 
-                    
+                    json['recordsTotal'] = json.count[0];
+                    json['recordsFiltered'] = json.count[0];
       
                     cacheLastJson = $.extend(true, {}, json);
-                    json = {
-
-                      recordsTotal: json.length,
-                      recordsFiltered:json.length,
-                      data: json
-                    }
+                  
                     if ( cacheLower != drawStart ) {
                         json.data.splice( 0, drawStart-cacheLower );
                     }
@@ -135,7 +131,7 @@ table = $("#feature_table").DataTable({
               "deferRender": true,
               "dataSrc": "",
               "type": "GET",
-              "pages": 3
+              "pages": 5
              
         }),
         "columns": [
@@ -168,7 +164,11 @@ table = $("#feature_table").DataTable({
         if (window.confirm('You really wanna delete this feature?'))
         {
         deleteFeature(id);
-        table.row( $(this).parents('tr') ).remove().draw();// They clicked Yes
+                 table.row( $(this).parents('tr') ).remove().clearPipeline().draw();
+
+       // table.row( $(this).parents('tr') ).remove().draw();
+     //   table.clearPipeline().draw();
+         // They clicked Yes
         }
         else
         {
@@ -194,39 +194,23 @@ table = $("#feature_table").DataTable({
     $('#btnSave').click(function(){
     var dataType;
     var url;
-    var data; 
-    var jsdata;
-
-         
-
-     if(save_method =='add'){
-      $('.modal-title').text('Add Features');
-      url = "../../../../RESTful/api/service/Feature";
-      data = {
+    var data = {
         renderingEngine: $('[name="renderingEngine"]').val(),
         browser:$('[name="browser"]').val(),
         platform:$('[name="platform"]').val(),
         engineVersion:$('[name="engineVersion"]').val(),
         cssGrade:$('[name="cssGrade"]').val()
       }
-      jsdata = JSON.stringify(data);
-           
-            //console.log(data);
-      dataType = "POST";
-      
-     }
+     var jsdata = JSON.stringify(data);   
 
+     if(save_method =='add'){
+      $('.modal-title').text('Add Features');
+      url = "../../../../RESTful/api/service/Feature";    
+      dataType = "POST"; 
+     }
      else{
       $('.modal-title').text('Edit Features');  
-      url = "../../../../RESTful/api/service/Feature/"+$('[name="id"]').val();
-      data = {
-        renderingEngine:$('[name="renderingEngine"]').val(),
-        browser:$('[name="browser"]').val(),
-        platform:$('[name="platform"]').val(),
-        engineVersion: $('[name="engineVersion"]').val(),
-        cssGrade:$('[name="cssGrade"]').val()
-      }
-      jsdata = JSON.stringify(data);
+      url = "../../../../RESTful/api/service/Feature/"+$('[name="id"]').val();   
       dataType = "PUT";
      }
   $('#btnSave').text('saving...'); //change button text
@@ -254,15 +238,7 @@ table = $("#feature_table").DataTable({
         }
      });
     });
-     
-
-});
-
-
-
-   
-
-  function deleteFeature($id) {
+     function deleteFeature($id) {
     $.ajax({
         "url": '../../../../RESTful/api/service/Feature/'+$id,
             "deferRender": true, 
@@ -275,7 +251,15 @@ table = $("#feature_table").DataTable({
     table.clearPipeline().draw();
 });
 
+    
+
+});
+
+
+
    
+
+ 
 
  
 
