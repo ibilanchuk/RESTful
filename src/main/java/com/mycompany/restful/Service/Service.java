@@ -7,21 +7,15 @@ package com.mycompany.restful.Service;
 
 import com.mycompany.restful.dao.FeaturesDao;
 import com.mycompany.restful.model.Features;
-import com.mysql.jdbc.StringUtils;
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.util.List;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+
+
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
-
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -38,10 +32,9 @@ import org.json.simple.JSONObject;
  * @author ibilanchuk
  */
 @Path("service")
-public class Service extends HttpServlet{
+public class Service {
 
-    @Context
-    private UriInfo context;
+
 
     /**
      * Creates a new instance of Service
@@ -63,8 +56,10 @@ public class Service extends HttpServlet{
     @GET
     @Path("/Features")
     @Produces(MediaType.APPLICATION_JSON)
-    public JSONObject getFeatures( @QueryParam("length")int length, @QueryParam("start") int start) {     
-        return featureDao.getFeatures(length,start);
+
+    public JSONObject getFeatures(@QueryParam("length") int length, @QueryParam("start") int start, @QueryParam("order[0][column]") int column,@QueryParam("order[0][dir]") String dir ) {
+       
+        return featureDao.getFeatures(length,start,column,dir);
     }   
     @GET
     @Path("/RenderingEngine")

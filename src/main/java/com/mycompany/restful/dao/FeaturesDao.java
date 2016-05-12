@@ -44,16 +44,16 @@ public class FeaturesDao {
         }
         return feature;
     }
-  public JSONObject getFeatures(int length, int start){
-
+  public JSONObject getFeatures(int length, int start,int column,String dir){
+        String [] s  = {"id","renderingEngine","browser","platform","engineVersion","cssGrade"};
         List feature = null;
         Session session = null;
         JSONObject obj = new JSONObject();
- 
+
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
-            feature = session.createQuery("from Features").setMaxResults(length).setFirstResult(start).list();
+            feature = session.createQuery("from Features order by "+s[column]+" "+ dir).setMaxResults(length).setFirstResult(start).list();
             Query q  = session.createQuery("SELECT COUNT(*) FROM Features");
             obj.put("count", q.list()); 
             obj.put("data", (List)feature);

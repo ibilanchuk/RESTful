@@ -126,6 +126,7 @@ $.fn.dataTable.Api.register( 'clearPipeline()', function () {
 table = $("#feature_table").DataTable({
              "processing": true,
              "serverSide": true,
+             "searching":true,
               "ajax": $.fn.dataTable.pipeline({
               "url": '../../../../RESTful/api/service/Features',
               "deferRender": true,
@@ -143,19 +144,11 @@ table = $("#feature_table").DataTable({
             {"data": "engineVersion", "title":"Engine Version"},
             {"data": "cssGrade", "title":"Css Grade"},
             {"targets": -1,"data": null,"defaultContent": "<a id = 'edit' class='btn btn-sm btn-primary'> <i class='glyphicon glyphicon-pencil'> </i> Edit</a>&nbsp<a id = 'delete' class='btn btn-sm btn-danger'><i class='glyphicon glyphicon-trash'></i> Delete</a> ","title":"Action"}    
-        ],
+        ]
         
-       
-    
-        "ordering": true,
-        "paging": true,
-    
-      "searching": true,
-      "info": true,
-       "autoWidth": false
-      
-      }); 
 
+      }); 
+  
 
   $('#feature_table tbody').on( 'click', '#delete', function () {
       
@@ -164,10 +157,8 @@ table = $("#feature_table").DataTable({
         if (window.confirm('You really wanna delete this feature?'))
         {
         deleteFeature(id);
-                 table.row( $(this).parents('tr') ).remove().clearPipeline().draw();
-
-       // table.row( $(this).parents('tr') ).remove().draw();
-     //   table.clearPipeline().draw();
+        table.row( $(this).parents('tr') ).remove().draw();
+        table.clearPipeline().draw();
          // They clicked Yes
         }
         else
@@ -247,6 +238,7 @@ table = $("#feature_table").DataTable({
     });
   }
 
+
   $('#reload').click(function(){
     table.clearPipeline().draw();
 });
@@ -255,13 +247,6 @@ table = $("#feature_table").DataTable({
 
 });
 
-
-
-   
-
- 
-
- 
 
 $('#add_feature').click(function(){
 
