@@ -7,10 +7,7 @@ package com.mycompany.restful.dao;
 
 import com.mycompany.restful.model.Features;
 import com.mycompany.restful.util.HibernateUtil;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
